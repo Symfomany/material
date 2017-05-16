@@ -1,6 +1,8 @@
-# post
+# API Inrecation
 
 > A Vue.js project
+URL of Server
+https://gist.github.com/Symfomany/ff47f7a587e888529930389ac0c9d675
 
 ## Build Setup
 
