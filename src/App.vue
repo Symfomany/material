@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="phone-viewport">
     <navbar></navbar>
     <router-view></router-view>
     <bottom-bar></bottom-bar>
@@ -7,13 +7,13 @@
 </template>
 
 <script>
-import Navbar from '@/components/Navbar'
-import BottomBar from '@/components/BottomBar'
+  import Navbar from '@/components/Navbar'
+  import BottomBar from '@/components/BottomBar'
 
-export default {
-  name: 'app',
-  components: {navbar: Navbar, bottomBar: BottomBar}
-}
+  export default {
+    name: 'app',
+    components: { navbar: Navbar, bottomBar: BottomBar }
+  }
 </script>
 
 <style scoped>

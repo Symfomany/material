@@ -4,6 +4,27 @@
 URL of Server
 https://gist.github.com/Symfomany/ff47f7a587e888529930389ac0c9d675
 
+
+This project use Vue Material
+https://vuematerial.github.io/#/
+
+
+main.js
+import VueMaterial from 'vue-material'
+import 'vue-material/dist/vue-material.css'
+
+/**
+ * Use Vue Material
+ */
+Vue.use(VueMaterial)
+
+
+
+index.html
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  
+
 ## Build Setup
 
 ``` bash
