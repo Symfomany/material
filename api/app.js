@@ -3,8 +3,7 @@ let express = require('express');
 let datas = require('./datas.json');
 let fs = require('fs');
 let bodyParser = require('body-parser'); // Parser le corps de la requete et ses paramètres (SECURITE)
-
-var cors = require('cors'); //allow another localhost access to this server
+let cors = require('cors'); //allow another localhost access to this server
 
 
 /**

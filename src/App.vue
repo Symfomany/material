@@ -1,9 +1,30 @@
 <template>
-  <div class="phone-viewport">
-    <navbar></navbar>
-    <router-view></router-view>
-    <bottom-bar></bottom-bar>
-  </div>
+  <!--<navbar></navbar>-->
+  <v-app id="example-1">
+
+    <v-toolbar>
+      <v-toolbar-title>Toolbar</v-toolbar-title>
+    </v-toolbar>
+    <main>
+      <v-sidebar class="blue darken-3" drawer v-model="sidebar" height="100%">
+        <v-list dense>
+          <v-list-item>
+            <v-list-tile>
+              <v-list-tile-title v-text="'dqdsqdq'" />
+            </v-list-tile>
+          </v-list-item>
+        </v-list>
+      </v-sidebar>
+
+      <v-content>
+        <v-container fluid>
+          <router-view></router-view>
+        </v-container>
+      </v-content>
+    </main>
+    <v-footer>Footer</v-footer>
+  </v-app>
+
 </template>
 
 <script>
@@ -12,7 +33,12 @@
 
   export default {
     name: 'app',
-    components: { navbar: Navbar, bottomBar: BottomBar }
+    data(){
+      return {
+        sidebar: false
+      }
+    },
+    components: { }
   }
 </script>
 

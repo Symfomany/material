@@ -1,11 +1,20 @@
 <template>
-  <div>
-    <md-bottom-bar>
-      <md-bottom-bar-item md-icon="history">Recents</md-bottom-bar-item>
-      <md-bottom-bar-item md-icon="favorite" md-active>Favorites</md-bottom-bar-item>
-      <md-bottom-bar-item md-icon="near_me">Nearby</md-bottom-bar-item>
-    </md-bottom-bar>
-  </div>
+  <v-card height="200px">
+    <v-bottom-nav absolute value="true" class="transparent">
+      <v-btn flat light class="teal--text" @click.native="e1 = 1" :value="e1 === 1">
+        <span>Recents</span>
+        <v-icon>history</v-icon>
+      </v-btn>
+      <v-btn flat light class="teal--text" @click.native="e1 = 2" :value="e1 === 2">
+        <span>Favorites</span>
+        <v-icon>favorite</v-icon>
+      </v-btn>
+      <v-btn flat light class="teal--text" @click.native="e1 = 3" :value="e1 === 3">
+        <span>Nearby</span>
+        <v-icon>place</v-icon>
+      </v-btn>
+    </v-bottom-nav>
+  </v-card>
 </template>
 
 <script>

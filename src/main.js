@@ -5,8 +5,10 @@ import VueResource from 'vue-resource';
 import App from './App'
 import router from './router'
 
-import VueMaterial from 'vue-material'
-import 'vue-material/dist/vue-material.css'
+// import VueMaterial from 'vue-material'
+// import 'vue-material/dist/vue-material.css'
+
+import Vuetify from 'vuetify'
 
 
 /**
@@ -17,7 +19,8 @@ Vue.use(VueResource);
 /**
  * Use Vue Material
  */
-Vue.use(VueMaterial)
+Vue.use(Vuetify)
+// Vue.use(VueMaterial)
 
 
 Vue.config.productionTip = false
