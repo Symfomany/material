@@ -68,8 +68,28 @@ app.delete('/delete/:id', function (req, res) {
  * "/visible" visible
  */
 app.get('/visible', function (req, res) {
-    let visibles = datas.filter((task) => task.visible == true);
+    let visibles = datas.filter((task) => task.visible === true);
     res.json(visibles);
+});
+
+/**
+ * "/invisible" visible
+ */
+app.get('/invisible', function (req, res) {
+    let invisibles = datas.filter((task) => task.visible === false);
+    res.json(invisibles);
+});
+
+app.post('/activation', function (req, res) {
+    let visibles = req.body.visibles;
+    datas.map((elt) => {
+        if (visibles.indexOf(elt.id)) {
+            elt.visible = true;
+        }
+    });
+
+    let all = datas.filter((task) => task.visible === false);
+    res.json(all);
 });
 
 /**

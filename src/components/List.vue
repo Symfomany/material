@@ -1,177 +1,224 @@
 <template>
   <v-row>
+    <v-snackbar :top="true" :right="true" v-model="snackbar">
+      Votre article a bien été ajouté
+      <v-btn flat class="pink--text" @click.native="snackbar = false">Fermer</v-btn>
+    </v-snackbar>
+
+    <v-col xs12 md6>
+      <v-card>
+        <v-toolbar class="cyan">
+          <v-toolbar-title>
+            <v-toolbar-side-icon class="grey--text text--darken-4" /> Gestion des Articles de Presse</v-toolbar-title>
+
+          <v-btn @click.native="changeVisibility" icon="icon" slot="activator" dark>
+            <v-icon v-html="iconVisible"></v-icon>
+          </v-btn>
 
 
-    <v-col xs6>
+          <v-menu bottom right>
+            <v-btn icon="icon" slot="activator" dark>
+              <v-icon>more_vert</v-icon>
 
-      <v-list three-line>
-        <template>
-          <v-subheader v-if="posts.length" v-text="posts.length" />
-          <v-list-item v-for="post in posts" :key="post.id">
-            <v-list-tile-content>
-              <v-list-tile-title v-html="post.title" />
-              <v-list-tile-sub-title v-html="post.description" />
-            </v-list-tile-content>
-          </v-list-item>
-        </template>
-        <!--<v-list-item v-for="post in posts" :key="post.id">-->
-      </v-list>
-    </v-col>
-
-    <v-col xs6>
-      <v-card class="grey lighten-4 elevation-0">
-        <v-card-text>
-          <v-container fluid>
-            <v-row row>
-              <v-col xs4>
-                <v-subheader>Titre de la catégorie</v-subheader>
-              </v-col>
-              <v-col xs8>
-                <v-text-field name="input-3" label="Courte(5 mots)" v-model="newPost.title"></v-text-field>
-              </v-col>
-            </v-row>
-
-            <v-row row>
-              <v-col xs4>
-                <v-subheader>Description de la catégorie</v-subheader>
-              </v-col>
-              <v-col xs8>
-                <v-text-field name="input-7-1" label="Blablabla..." v-model="newPost.description" multi-line></v-text-field>
-              </v-col>
-            </v-row>
-
-            <v-row row>
-              <v-btn primary default class="btn--light-flat">Ajouter cette Article</v-btn>
-            </v-row>
+            </v-btn>
+            <v-list>
+              <v-list-item>
+                <v-list-tile @click.native="changeVisibles">
+                  <v-list-tile-title>Activer la selection</v-list-tile-title>
+                </v-list-tile>
+              </v-list-item>
+              <v-list-item>
+                <v-list-tile>
+                  <v-list-tile-title>Supprimer la selection</v-list-tile-title>
+                </v-list-tile>
+              </v-list-item>
+            </v-list>
+          </v-menu>
 
 
-            <v-row row>
-              <v-col xs4>
-                <v-subheader>Note sur 5</v-subheader>
-              </v-col>
-              <v-col xs8>
-                <v-card class="grey lighten-4 elevation-0">
-                  <v-card-text>
-                    <v-slider v-model="newPost.note" light />
-                  </v-card-text>
-                </v-card>
+        </v-toolbar>
+        <v-progress-linear v-if="posts.length == 0" v-bind:indeterminate="true"></v-progress-linear>
 
-              </v-col>
-            </v-row>
+        <v-list three-line>
+          <v-subheader v-text="posts.length + ' articles visibles'" />
+          <template v-for="item in posts">
+            <v-list-item :key="item.id">
+              <v-list-tile>
 
-          </v-container>
-        </v-card-text>
+                <v-list-tile-action v-if="item.visible === false">
+                  <v-checkbox v-model="visibles" :value="item.id" />
+                </v-list-tile-action>
+
+                <v-list-tile-content>
+                  <v-list-tile-title v-html="item.title" />
+                  <v-list-tile-sub-title v-html="item.description" />
+                </v-list-tile-content>
+
+                <v-list-tile-action>
+                  <v-btn @click.native="remove(item)" icon ripple>
+                    <v-icon class="pink--text text--lighten-1">delete</v-icon>
+                  </v-btn>
+                </v-list-tile-action>
+
+              </v-list-tile>
+            </v-list-item>
+          </template>
+        </v-list>
       </v-card>
     </v-col>
+
+    <v-col xs12 md6>
+
+      <v-card>
+        <v-card-row class="purple">
+          <v-card-title>
+            <span class="white--text">Création d'article</span>
+            <v-spacer></v-spacer>
+          </v-card-title>
+        </v-card-row>
+
+
+        <v-container fluid>
+
+
+          <v-row row>
+            <v-col xs4>
+              <v-subheader>Titre de la catégorie</v-subheader>
+            </v-col>
+            <v-col xs8>
+              <v-text-field name="input-3" label="Courte(5 mots)" v-model="newPost.title"></v-text-field>
+            </v-col>
+          </v-row>
+
+          <v-row row>
+            <v-col xs4>
+              <v-subheader>Description de la catégorie</v-subheader>
+            </v-col>
+            <v-col xs8>
+              <v-text-field name="input-7-1" label="Blablabla..." v-model="newPost.description" multi-line></v-text-field>
+            </v-col>
+          </v-row>
+
+          <v-row row>
+            <v-col xs4>
+              <v-subheader>Date de publication</v-subheader>
+            </v-col>
+            <v-col xs8>
+              <v-dialog v-model="newPost.datePublication" persistent lazy>
+                <v-text-field slot="activator" label="Choisir une date" prepend-icon="event"></v-text-field>
+                <v-date-picker v-model="newPost.datePicker" scrollable></v-date-picker>
+              </v-dialog>
+            </v-col>
+          </v-row>
+
+          <v-row row>
+            <v-col xs4>
+              <v-subheader v-text="'Standard'" />
+            </v-col>
+            <v-col xs8>
+              <v-select :items="categories" v-model="newPost.categorie" label="Select" light single-line auto />
+            </v-col>
+          </v-row>
+
+
+          <v-row row>
+            <v-col xs4>
+              <v-subheader>Note sur 5</v-subheader>
+            </v-col>
+            <v-col xs8>
+              <v-slider v-model="newPost.note" :max="5" :min="1" step="1" light />
+            </v-col>
+          </v-row>
+          <v-row row>
+            <v-col xs4>
+              <v-subheader>Visible sur le site</v-subheader>
+            </v-col>
+            <v-col xs8>
+              <v-checkbox success v-model="newPost.visible" light />
+            </v-col>
+          </v-row>
+
+          <v-card-row actions>
+            <v-btn @click.native="save" primary large>
+              <v-icon>edit</v-icon> Ajouter cette Article</v-btn>
+          </v-card-row>
+
+        </v-container>
+      </v-card>
+
+    </v-col>
   </v-row>
-  <!--<md-list class="md-double-line">
-            <md-list-item v-for="post in posts" :key="post.id">
-
-              <div class="md-list-text-container">
-                <md-icon class="md-primary">bookmark_border</md-icon>
-                <h3 class="title">{{ post.title|truncate }} - <i>{{ post.categorie }}</i></h3>
-                <p>{{ post.description|truncate }}</p>
-              </div>
-
-              <md-button class="md-icon-button md-list-action">
-                <md-icon @click.native="remove(post)" class="md-primary">delete_forever</md-icon>
-              </md-button>
-
-              <md-divider class="md-inset"></md-divider>
-
-            </md-list-item>
-          </md-list>-->
-
-
-  <!--</md-layout>-->
-
-
-
-  <!--<md-layout :md-gutter="60">
-
-        <form novalidate @submit.stop.prevent="save" style="width: 80%">
-
-          <md-input-container>
-            <md-icon>edit</md-icon>
-            <label>Un long et joli titre</label>
-            <md-input v-model="newPost.title" placeholder="Un titre"></md-input>
-          </md-input-container>
-
-          <md-input-container>
-            <md-icon>edit</md-icon>
-            <label>Une petite description</label>
-            <md-textarea v-model="newPost.description"></md-textarea>
-          </md-input-container>
-
-          <md-input-container>
-            <md-icon>view_list</md-icon>
-            <label>Une catégorie associée</label>
-            <md-select v-model="newPost.categorie" name="movie" id="movie">
-              <md-option value="sport">Catégorie Sport</md-option>
-              <md-option value="insolite">Catégorie Insolite</md-option>
-              <md-option value="politique">Catégorie Politique</md-option>
-              <md-option value="finance">Catégorie Finance</md-option>
-            </md-select>
-          </md-input-container>
-
-          <md-checkbox id="my-test1" v-model="newPost.visible" name="my-test1">
-            <label for="">Est t-il visible sur le site ?</label></md-checkbox>
-
-          <range-slider class="slider" min="1" max="5" step="1" v-model="newPost.note">
-          </range-slider>-->
-  <!--<md-input type="number" v-model="newPost.note"></md-input>-->
-
-  <!--<md-button @click.native="save" class="md-raised md-primary">
-            <md-icon>add</md-icon> Ajouter cet article</md-button>
-        </form>
-
-      </md-layout>
-    </md-layout>-->
 
 </template>
 
 <script>
-import RangeSlider from 'vue-range-slider'
-import 'vue-range-slider/dist/vue-range-slider.css'
-
 
   export default {
     name: 'list',
-    components: {
-      RangeSlider
-    },
+    components: {},
     data() {
       return {
+        visibles: [],
+        iconVisible: 'visibility_off',
+        snackbar: false,
+        categories: ['Sport', 'Politique', 'Finance', 'Actualité', 'Insolite', 'Santé', 'Technologie', 'Amour'],
         newPost: {
           title: "",
           note: 3,
           visible: true,
           categorie: "",
-          description: ""
+          description: "",
+          datePublication: null,
+          datePicker: null
         },
         posts: []
       }
     },
     created() {
-      this.$http.get('http://localhost:3000/').then(response => {
-        this.posts = response.body
+      this.$http.get('http://localhost:3000/visible').then(response => {
+        this.posts = response.body;
       });
     },
     filters: {
-      truncate(text){
-        return text.split(" ").splice(0,10).join(" ") + "...";
+      truncate(text) {
+        return text.split(" ").splice(0, 10).join(" ") + "...";
       }
     },
     methods: {
+      changeVisibles() {
+        if (this.visibles.length >= 1) {
+          this.$http.post('http://localhost:3000/activation', { visibles: this.visibles }).then(response => {
+            this.posts = response.body;
+          });
+        }
+      },
+      changeVisibility() {
+        if (this.iconVisible == 'visibility_off') {
+          this.iconVisible = 'visibility';
+          this.$http.get('http://localhost:3000/invisible').then(response => {
+            this.posts = response.body;
+          });
+        } else {
+          this.iconVisible = 'visibility_off';
+          this.$http.get('http://localhost:3000/visible').then(response => {
+            this.posts = response.body;
+          });
+        }
+      },
       save() {
         this.$http.post(`http://localhost:3000/save`, this.newPost).then(response => {
           if (response.body) {
+            this.snackbar = true;
+
             this.posts.push(response.body);
             this.newPost = {
               title: "",
               note: 3,
               visible: true,
-              categorie: ""
+              categorie: "",
+              description: "",
+              datePublication: null,
+              datePicker: null
             };
           }
         });

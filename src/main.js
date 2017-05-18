@@ -4,10 +4,6 @@ import Vue from 'vue'
 import VueResource from 'vue-resource';
 import App from './App'
 import router from './router'
-
-// import VueMaterial from 'vue-material'
-// import 'vue-material/dist/vue-material.css'
-
 import Vuetify from 'vuetify'
 
 

@@ -1,20 +1,23 @@
 <template>
-  <!--<navbar></navbar>-->
-  <v-app id="example-1">
+  <v-app id="sidebar-example-2" class="elevation-1" top-toolbar left-fixed-sidebar sidebar-under-toolbar>
 
-    <v-toolbar>
-      <v-toolbar-title>Toolbar</v-toolbar-title>
+    <v-toolbar class="pink">
+      <v-toolbar-side-icon @click.native.stop="sidebar = !sidebar" />
+      <v-toolbar-title class="hidden-sm-and-down">App Blog</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon dark>
+        <v-icon>add_alert</v-icon>
+      </v-btn>
+      <v-btn icon dark>
+        <v-icon>favorite</v-icon>
+      </v-btn>
+      <v-btn icon dark>
+        <v-icon>more_vert</v-icon>
+      </v-btn>
     </v-toolbar>
+
     <main>
-      <v-sidebar class="blue darken-3" drawer v-model="sidebar" height="100%">
-        <v-list dense>
-          <v-list-item>
-            <v-list-tile>
-              <v-list-tile-title v-text="'dqdsqdq'" />
-            </v-list-tile>
-          </v-list-item>
-        </v-list>
-      </v-sidebar>
+      <v-sidebar class="blue" v-model="sidebar" left fixed drawer height="100%"></v-sidebar>
 
       <v-content>
         <v-container fluid>
@@ -22,7 +25,7 @@
         </v-container>
       </v-content>
     </main>
-    <v-footer>Footer</v-footer>
+    <v-footer>Wild Code School 2017</v-footer>
   </v-app>
 
 </template>
@@ -33,12 +36,17 @@
 
   export default {
     name: 'app',
-    data(){
+    data() {
       return {
         sidebar: false
       }
     },
-    components: { }
+    methods: {
+      openSidebar() {
+        this.sidebar = !this.sidebar;
+      }
+    },
+    components: {}
   }
 </script>
 
