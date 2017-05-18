@@ -92,6 +92,16 @@ app.post('/activation', function (req, res) {
     res.json(all);
 });
 
+app.post('/removes', function (req, res) {
+    let visibles = req.body.visibles;
+    datas = datas.filter((elt) => visibles.indexOf(elt.id));
+
+    let json = JSON.stringify(datas);
+    fs.writeFile('datas.json', json, 'utf8', () => {
+        res.json(datas);
+    });
+});
+
 /**
  * "star" >= 7
  */

@@ -23,12 +23,7 @@
             </v-btn>
             <v-list>
               <v-list-item>
-                <v-list-tile @click.native="changeVisibles">
-                  <v-list-tile-title>Activer la selection</v-list-tile-title>
-                </v-list-tile>
-              </v-list-item>
-              <v-list-item>
-                <v-list-tile>
+                <v-list-tile @click.native="removes">
                   <v-list-tile-title>Supprimer la selection</v-list-tile-title>
                 </v-list-tile>
               </v-list-item>
@@ -45,7 +40,7 @@
             <v-list-item :key="item.id">
               <v-list-tile>
 
-                <v-list-tile-action v-if="item.visible === false">
+                <v-list-tile-action>
                   <v-checkbox v-model="visibles" :value="item.id" />
                 </v-list-tile-action>
 
@@ -192,6 +187,13 @@
           });
         }
       },
+      removes() {
+        if (this.visibles.length >= 1) {
+          this.$http.post('http://localhost:3000/removes', { visibles: this.visibles }).then(response => {
+            this.posts = response.body;
+          });
+        }
+      },
       changeVisibility() {
         if (this.iconVisible == 'visibility_off') {
           this.iconVisible = 'visibility';
@@ -210,7 +212,7 @@
           if (response.body) {
             this.snackbar = true;
 
-            this.posts.push(response.body);
+
             this.newPost = {
               title: "",
               note: 3,
@@ -220,6 +222,11 @@
               datePublication: null,
               datePicker: null
             };
+
+            this.$http.get('http://localhost:3000/visible').then(response => {
+              this.posts = response.body;
+            });
+
           }
         });
       },
